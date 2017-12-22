@@ -6,6 +6,18 @@
 #端口号
 server:
     port: 8888
+    tomcat:
+    # 用于支持页面修改后重新发布到spring-boot内嵌的tomcat中去
+        access_log_enabled: true
+        basedir: target/tomcat
+# 默认约定了Controller试图跳转中thymeleaf模板文件的的前缀prefix是”classpath:/templates/”,后缀suffix是”.html”
+spring:
+  thymeleaf:
+    template-loader-path: classpath:/view/
+    #prefix: /view/
+    suffix: .html
+    cache: false
+
 #在application.properties文件中引入日志配置文件
 #=====================================  log  =============================
 #logging:
