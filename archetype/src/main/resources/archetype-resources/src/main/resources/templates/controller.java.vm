@@ -1,0 +1,175 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+package ${symbol_dollar}{package.Controller};
+
+
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+${symbol_pound}if(${symbol_dollar}{restControllerStyle})
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+${symbol_pound}else
+import org.springframework.stereotype.Controller;
+${symbol_pound}end
+${symbol_pound}if(${symbol_dollar}{superControllerClassPackage})
+import ${symbol_dollar}{superControllerClassPackage};
+${symbol_pound}end
+import org.springframework.beans.factory.annotation.Autowired;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
+import ${symbol_dollar}{package.Service}.${symbol_dollar}{table.serviceName};
+import ${symbol_dollar}{package.Entity}.common.DatatablesJSON;
+import ${symbol_dollar}{package.Entity}.common.JSONResult;
+import ${symbol_dollar}{package.Entity}.${symbol_dollar}{entity};
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+/**
+ *code is far away from bug with the animal protecting
+ *  ┏┓　　　┏┓
+ *┏┛┻━━━┛┻┓
+ *┃　　　　　　　┃ 　
+ *┃　　　━　　　┃
+ *┃　┳┛　┗┳　┃
+ *┃　　　　　　　┃
+ *┃　　　┻　　　┃
+ *┃　　　　　　　┃
+ *┗━┓　　　┏━┛
+ *　　┃　　　┃神兽保佑
+ *　　┃　　　┃代码无BUG！
+ *　　┃　　　┗━━━┓
+ *　　┃　　　　　　　┣┓
+ *　　┃　　　　　　　┏┛
+ *　　┗┓┓┏━┳┓┏┛
+ *　　　┃┫┫　┃┫┫
+ *　　　┗┻┛　┗┻┛
+ *
+ *   @description : ${symbol_dollar}{entity} 控制器
+ *   ---------------------------------
+ *      @author ${symbol_dollar}{author}
+ *   @since ${symbol_dollar}{date}
+ */
+${symbol_pound}if(${symbol_dollar}{restControllerStyle})
+@RestController
+${symbol_pound}else
+@Controller
+${symbol_pound}end
+@RequestMapping("${symbol_pound}if(${symbol_dollar}{package.ModuleName})/${symbol_dollar}{package.ModuleName}${symbol_pound}end/${symbol_pound}if(${symbol_dollar}{controllerMappingHyphenStyle})${symbol_dollar}{controllerMappingHyphen}${symbol_pound}else${symbol_dollar}{table.entityPath}${symbol_pound}end")
+${symbol_pound}if(${symbol_dollar}{superControllerClass})
+public class ${symbol_dollar}{table.controllerName} extends ${symbol_dollar}{superControllerClass} {
+${symbol_pound}else
+public class ${symbol_dollar}{table.controllerName} {
+${symbol_pound}end
+private final Logger logger = LoggerFactory.getLogger(${symbol_dollar}{table.controllerName}.class);
+
+@Autowired
+public ${symbol_dollar}{table.serviceName} ${symbol_dollar}{table.entityPath}Service;
+
+/**
+ * @description : 获取分页列表
+ * ---------------------------------
+ * @author : ${symbol_dollar}{author}
+ * @since : Create in ${symbol_dollar}{date}
+ */
+@RequestMapping(value = "/get${symbol_dollar}{entity}List",method = RequestMethod.POST)
+public Object get${symbol_dollar}{entity}List(${symbol_dollar}{entity} param , @RequestParam(value = "draw",defaultValue = "0") Integer draw,
+@RequestParam(value = "length") Integer length,
+@RequestParam(value = "start") Integer start) {
+        DatatablesJSON<${symbol_dollar}{entity}> resJson=new DatatablesJSON<>();
+        try {
+        Integer pageNo=getPageNo(start,length);
+        Page<${symbol_dollar}{entity}> page=new Page<${symbol_dollar}{entity}>(pageNo,length);
+    ${symbol_dollar}{table.entityPath}Service.selectPage(page,new EntityWrapper<${symbol_dollar}{entity}>(param));
+        resJson.setDraw(draw++);
+        resJson.setRecordsTotal(page.getTotal());
+        resJson.setRecordsFiltered(page.getTotal());
+        resJson.setData(page.getRecords());
+        resJson.setSuccess(true);
+        }catch (Exception e){
+        resJson.setSuccess(false);
+        resJson.setError("异常信息:{"+e.getClass().getName()+"}");
+        logger.info("异常信息:{}"+e.getMessage());
+        }
+        return resJson;
+        }
+
+/**
+ * @description : 通过id获取${symbol_dollar}{entity}
+ * ---------------------------------
+ * @author : ${symbol_dollar}{author}
+ * @since : Create in ${symbol_dollar}{date}
+ */
+@RequestMapping(value = "/get${symbol_dollar}{entity}ById",method = RequestMethod.GET)
+public Object get${symbol_dollar}{entity}ById(String id) {
+        JSONResult<${symbol_dollar}{entity}> resJson = new JSONResult<>();
+        try {
+    ${symbol_dollar}{entity} param= ${symbol_dollar}{table.entityPath}Service.selectById(id);
+        resJson.setData(param);
+        resJson.setSuccess(true);
+        }catch (Exception e) {
+        resJson.setSuccess(false);
+        resJson.setMessage("异常信息:{"+e.getClass().getName()+"}");
+        logger.info("异常信息:{}"+e.getMessage());
+        }
+        return resJson;
+        }
+
+/**
+ * @description : 通过id删除${symbol_dollar}{entity}
+ * ---------------------------------
+ * @author : ${symbol_dollar}{author}
+ * @since : Create in ${symbol_dollar}{date}
+ */
+@RequestMapping(value = "/delete${symbol_dollar}{entity}ById",method = RequestMethod.GET)
+public Object delete${symbol_dollar}{entity}ById(String id) {
+        JSONResult<${symbol_dollar}{entity}> resJson = new JSONResult<>();
+        try{
+        resJson.setSuccess(${symbol_dollar}{table.entityPath}Service.deleteById(id));
+        }catch (Exception e) {
+        resJson.setSuccess(false);
+        resJson.setMessage("异常信息:{"+e.getClass().getName()+"}");
+        logger.info("异常信息:{}"+e.getMessage());
+        }
+        return resJson;
+        }
+
+/**
+ * @description : 通过id更新${symbol_dollar}{entity}
+ * ---------------------------------
+ * @author : ${symbol_dollar}{author}
+ * @since : Create in ${symbol_dollar}{date}
+ */
+@RequestMapping(value = "/update${symbol_dollar}{entity}ById",method = RequestMethod.POST)
+public Object update${symbol_dollar}{entity}ById(${symbol_dollar}{entity} param) {
+        JSONResult<${symbol_dollar}{entity}> resJson = new JSONResult<>();
+        try{
+        resJson.setSuccess(${symbol_dollar}{table.entityPath}Service.updateById(param));
+        }catch (Exception e) {
+        resJson.setSuccess(false);
+        resJson.setMessage("异常信息:{"+e.getClass().getName()+"}");
+        logger.info("异常信息:{}"+e.getMessage());
+        }
+        return resJson;
+        }
+
+/**
+ * @description : 添加${symbol_dollar}{entity}
+ * ---------------------------------
+ * @author : ${symbol_dollar}{author}
+ * @since : Create in ${symbol_dollar}{date}
+ */
+@RequestMapping(value = "/add${symbol_dollar}{entity}",method = RequestMethod.POST)
+public Object add${symbol_dollar}{entity}(${symbol_dollar}{entity} param) {
+        JSONResult<${symbol_dollar}{entity}> resJson = new JSONResult<>();
+        try{
+        resJson.setSuccess(${symbol_dollar}{table.entityPath}Service.insert(param));
+        }catch (Exception e) {
+        resJson.setSuccess(false);
+        resJson.setMessage("异常信息:{"+e.getClass().getName()+"}");
+        logger.info("异常信息:{}"+e.getMessage());
+        }
+        return resJson;
+        }
+        }
