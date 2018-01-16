@@ -14,9 +14,11 @@ server:
 spring:
   thymeleaf:
     template-loader-path: classpath:/view/
-    #prefix: /view/
+    prefix: classpath:/view/
     suffix: .html
     cache: false
+    encoding: UTF-8
+    mode: LEGACYHTML5 # 声明thymeleaf使用非严格的html
 
 #在application.properties文件中引入日志配置文件
 #=====================================  log  =============================

@@ -4,10 +4,7 @@ import com.xinqch.springbootarchetype.entity.TestTab;
 import com.xinqch.springbootarchetype.service.TestTabService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 测试Controller
@@ -21,18 +18,19 @@ public class TestController {
     @Autowired
     private TestTabService testTabService;
 
-//    @RequestMapping(value = "/getShop")
-//    public TestTab getShop(@RequestParam("id") String id) {
-//        System.out.println("id = [" + id + "]");
-//        TestTab t1 = testTabService.getById(id);
-//        System.out.println("id = [" + t1.getId()+"---"+ t1.getMessage()+ "]");
-//        TestTab t2 = testTabService.getByIdSlave(id);
-//        System.out.println("id = [" + t2.getId()+"---"+ t2.getMessage() + "]");
-//
-//        return t1;
-//    }t1
+    @RequestMapping(value = "/getShop")
+    public @ResponseBody
+    TestTab getShop(@RequestParam("id") String id) {
+        System.out.println("id = [" + id + "]");
+        TestTab t1 = testTabService.getById(id);
+        System.out.println("id = [" + t1.getId()+"---"+ t1.getMessage()+ "]");
+        TestTab t2 = testTabService.getByIdSlave(id);
+        System.out.println("id = [" + t2.getId()+"---"+ t2.getMessage() + "]");
 
-    @RequestMapping(value = "/getShop", method = RequestMethod.GET)
+        return t1;
+    }
+
+    @RequestMapping(value = "/getShop/html", method = RequestMethod.GET)
     public String getShop() {
 
         return "test";

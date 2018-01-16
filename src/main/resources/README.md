@@ -24,6 +24,15 @@
         可以使用参数变量。在文件中引用参数变量的方式${参数名},例如${package}.通常生成A-template项目时，
         archetype插件会扫描A-min所有的文件，把需要替换为参数的地方自动替换。毕竟代码没有那么智能，有些地方会有问题。
         所以，我们要检查每个文件的参数部分是不是我们预期的。增加参数、删除参数来达到我们的要求。
+        
+         <requiredProperties>
+              <requiredPropertie key="${groupId}" />
+              <requiredPropertie key="${artifactId}" />
+              <requiredProperty key="${version}">
+                <defaultValue>1.0.0</defaultValue>
+              </requiredProperty>
+         </requiredProperties>
+            
 #####3.编译项目模版到本地仓库
         我们进入generated-sources 文件夹下的archetype 目录，在此目录下执行mvn clean install 编译项目模版，并添加到
         本地仓库，当然如果你要想工作组中使用可以执行 mvn deploy 发布到私服或者指定仓库中
